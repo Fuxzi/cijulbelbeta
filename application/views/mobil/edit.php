@@ -7,44 +7,38 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="<?= site_url('mobil/update') ?>" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="id" value="<?= $mobil->id ?>">
+                <input type="hidden" name="id_mobil" value="<?= $mobil->id_mobil ?>">
 
                 <div class="row">
                     <div class="col-md-6">
                         <h6 class="font-weight-bold text-primary mb-3">Informasi Umum</h6>
                         <div class="form-group">
                             <label>Nama Mobil</label>
-                            <input type="text" name="nama_mobil" class="form-control" value="<?= $mobil->nama_mobil ?>" required>
+                            <input type="text" name="nama_mobil" class="form-control" value="<?= $mobil->nama_mobil ?? $mobil->merk . ' ' . $mobil->tipe ?>" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label>Merek</label>
-                                <input type="text" name="merek" class="form-control" value="<?= $mobil->merek ?>">
+                                <label>Merk <span class="text-danger">*</span></label>
+                                <input type="text" name="merk" class="form-control" value="<?= $mobil->merk ?>" required>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Model</label>
-                                <input type="text" name="model" class="form-control" value="<?= $mobil->model ?>">
-                            </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Tipe</label>
                                 <input type="text" name="tipe" class="form-control" value="<?= $mobil->tipe ?>">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Tahun</label>
                                 <input type="number" name="tahun" class="form-control" value="<?= $mobil->tahun ?>">
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Warna</label>
                                 <input type="text" name="warna" class="form-control" value="<?= $mobil->warna ?>">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>KM Tempuh</label>
-                                <input type="number" name="km_tempuh" class="form-control" value="<?= $mobil->km_tempuh ?>">
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>KM Tempuh</label>
+                            <input type="number" name="km_tempuh" class="form-control" value="<?= $mobil->km_tempuh ?? 0 ?>">
                         </div>
                     </div>
 
@@ -54,15 +48,17 @@
                             <div class="form-group col-md-6">
                                 <label>Transmisi</label>
                                 <select name="transmisi" class="form-control">
-                                    <option value="Manual" <?= $mobil->transmisi == 'Manual' ? 'selected' : '' ?>>Manual</option>
-                                    <option value="Otomatis" <?= $mobil->transmisi == 'Otomatis' ? 'selected' : '' ?>>Otomatis</option>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Manual" <?= ($mobil->transmisi ?? '') == 'Manual' ? 'selected' : '' ?>>Manual</option>
+                                    <option value="Otomatis" <?= ($mobil->transmisi ?? '') == 'Otomatis' ? 'selected' : '' ?>>Otomatis</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Bahan Bakar</label>
                                 <select name="bahan_bakar" class="form-control">
+                                    <option value="">-- Pilih --</option>
                                     <?php foreach (['Bensin','Diesel','Hybrid','Listrik'] as $bb): ?>
-                                    <option value="<?= $bb ?>" <?= $mobil->bahan_bakar == $bb ? 'selected' : '' ?>><?= $bb ?></option>
+                                    <option value="<?= $bb ?>" <?= ($mobil->bahan_bakar ?? '') == $bb ? 'selected' : '' ?>><?= $bb ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -70,20 +66,21 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Kapasitas Mesin</label>
-                                <input type="text" name="kapasitas_mesin" class="form-control" value="<?= $mobil->kapasitas_mesin ?>">
+                                <input type="text" name="kapasitas_mesin" class="form-control" value="<?= $mobil->kapasitas_mesin ?? '' ?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kondisi</label>
                                 <select name="kondisi" class="form-control">
+                                    <option value="">-- Pilih --</option>
                                     <?php foreach (['Sangat Baik','Baik','Cukup'] as $k): ?>
-                                    <option value="<?= $k ?>" <?= $mobil->kondisi == $k ? 'selected' : '' ?>><?= $k ?></option>
+                                    <option value="<?= $k ?>" <?= ($mobil->kondisi ?? '') == $k ? 'selected' : '' ?>><?= $k ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Harga (Rp)</label>
-                            <input type="number" name="harga" class="form-control" value="<?= $mobil->harga ?>">
+                            <label>Harga (Rp) <span class="text-danger">*</span></label>
+                            <input type="number" name="harga" class="form-control" value="<?= $mobil->harga ?>" required>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -91,7 +88,7 @@
                                 <select name="id_kategori" class="form-control">
                                     <option value="">-- Pilih --</option>
                                     <?php foreach ($kategori as $kat): ?>
-                                    <option value="<?= $kat->id ?>" <?= $mobil->id_kategori == $kat->id ? 'selected' : '' ?>><?= $kat->nama_kategori ?></option>
+                                    <option value="<?= $kat->id ?>" <?= ($mobil->id_kategori ?? '') == $kat->id ? 'selected' : '' ?>><?= $kat->nama_kategori ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -99,17 +96,17 @@
                                 <label>Status</label>
                                 <select name="status" class="form-control">
                                     <?php foreach (['Tersedia','Dipesan','Terjual'] as $s): ?>
-                                    <option value="<?= $s ?>" <?= $mobil->status == $s ? 'selected' : '' ?>><?= $s ?></option>
+                                    <option value="<?= $s ?>" <?= ($mobil->status ?? '') == $s ? 'selected' : '' ?>><?= $s ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Penjual</label>
+                            <label>Penjual / Dealer</label>
                             <select name="id_penjual" class="form-control">
                                 <option value="">-- Pilih --</option>
                                 <?php foreach ($penjual as $p): ?>
-                                <option value="<?= $p->id ?>" <?= $mobil->id_penjual == $p->id ? 'selected' : '' ?>><?= $p->nama ?></option>
+                                <option value="<?= $p->id ?>" <?= ($mobil->id_penjual ?? '') == $p->id ? 'selected' : '' ?>><?= $p->nama ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -119,11 +116,14 @@
                 <div class="form-row">
                     <div class="form-group col-md-8">
                         <label>Deskripsi</label>
-                        <textarea name="deskripsi" class="form-control" rows="3"><?= $mobil->deskripsi ?></textarea>
+                        <textarea name="deskripsi" class="form-control" rows="3"><?= $mobil->deskripsi ?? '' ?></textarea>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Foto Mobil <span class="text-muted small">(kosongkan jika tidak diganti)</span></label>
-                        <img src="<?= base_url('assets/uploads/mobil/' . $mobil->foto) ?>"
+                        <?php 
+                        $foto_path = base_url('assets/img/' . ($mobil->foto ?? 'noimage.jpg'));
+                        ?>
+                        <img src="<?= $foto_path ?>"
                              class="img-fluid mb-2 rounded" style="max-height:100px;" id="preview">
                         <input type="file" name="foto" class="form-control-file" accept="image/*"
                                onchange="previewFoto(this)">
@@ -137,6 +137,7 @@
         </div>
     </div>
 </div>
+
 <script>
 function previewFoto(input) {
     if (input.files && input.files[0]) {

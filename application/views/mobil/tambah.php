@@ -17,33 +17,27 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label>Merek <span class="text-danger">*</span></label>
-                                <input type="text" name="merek" class="form-control" placeholder="Toyota, Honda..." required>
+                                <label>Merk <span class="text-danger">*</span></label>
+                                <input type="text" name="merk" class="form-control" placeholder="Toyota, Honda..." required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>Model</label>
-                                <input type="text" name="model" class="form-control" placeholder="Avanza, Jazz...">
+                                <label>Tipe</label>
+                                <input type="text" name="tipe" class="form-control" placeholder="Avanza, Jazz...">
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label>Tipe</label>
-                                <input type="text" name="tipe" class="form-control" placeholder="G, E, S...">
-                            </div>
                             <div class="form-group col-md-6">
                                 <label>Tahun <span class="text-danger">*</span></label>
                                 <input type="number" name="tahun" class="form-control" placeholder="2020" min="1990" max="<?= date('Y') ?>" required>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Warna</label>
                                 <input type="text" name="warna" class="form-control" placeholder="Putih, Hitam...">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>KM Tempuh</label>
-                                <input type="number" name="km_tempuh" class="form-control" placeholder="50000">
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>KM Tempuh</label>
+                            <input type="number" name="km_tempuh" class="form-control" placeholder="50000" value="0">
                         </div>
                     </div>
 
@@ -53,6 +47,7 @@
                             <div class="form-group col-md-6">
                                 <label>Transmisi</label>
                                 <select name="transmisi" class="form-control">
+                                    <option value="">-- Pilih --</option>
                                     <option value="Manual">Manual</option>
                                     <option value="Otomatis">Otomatis</option>
                                 </select>
@@ -60,6 +55,7 @@
                             <div class="form-group col-md-6">
                                 <label>Bahan Bakar</label>
                                 <select name="bahan_bakar" class="form-control">
+                                    <option value="">-- Pilih --</option>
                                     <option value="Bensin">Bensin</option>
                                     <option value="Diesel">Diesel</option>
                                     <option value="Hybrid">Hybrid</option>
@@ -75,6 +71,7 @@
                             <div class="form-group col-md-6">
                                 <label>Kondisi</label>
                                 <select name="kondisi" class="form-control">
+                                    <option value="">-- Pilih --</option>
                                     <option value="Sangat Baik">Sangat Baik</option>
                                     <option value="Baik">Baik</option>
                                     <option value="Cukup">Cukup</option>

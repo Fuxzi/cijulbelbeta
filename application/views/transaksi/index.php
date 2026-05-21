@@ -13,17 +13,16 @@
         <div class="card-body">
             <table class="table table-bordered dataTable">
                 <thead class="thead-light">
-                    <tr><th>No</th><th>Kode</th><th>Mobil</th><th>Pembeli</th><th>Harga Deal</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr>
+                    <tr><th>No</th><th>Kode</th><th>Mobil</th><th>Pembeli</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr>
                 </thead>
                 <tbody>
                     <?php if ($transaksi): $no = 1; foreach ($transaksi as $t): ?>
                     <tr>
                         <td><?= $no++ ?></td>
-                        <td><small class="text-muted"><?= $t->kode_transaksi ?></small></td>
-                        <td><?= $t->merek ?> <?= $t->nama_mobil ?></td>
+                        <td><code><?= $t->id_pemesanan ?></code></td>
+                        <td><?= $t->merk . ' ' . $t->tipe ?></td>
                         <td><?= $t->nama_pembeli ?></td>
-                        <td>Rp <?= number_format($t->harga_deal, 0, ',', '.') ?></td>
-                        <td><?= date('d-m-Y', strtotime($t->tgl_transaksi)) ?></td>
+                        <td><?= date('d-m-Y', strtotime($t->tanggal)) ?></td>
                         <td>
                             <?php
                             $badge = ['Pending'=>'warning','Diproses'=>'info','Selesai'=>'success','Batal'=>'danger'];
@@ -32,13 +31,13 @@
                             <span class="badge badge-<?= $b ?>"><?= $t->status ?></span>
                         </td>
                         <td>
-                            <a href="<?= site_url('transaksi/detail/' . $t->id) ?>" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                            <a href="<?= site_url('transaksi/hapus/' . $t->id) ?>" class="btn btn-danger btn-sm"
+                            <a href="<?= site_url('transaksi/detail/' . $t->id_pemesanan) ?>" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                            <a href="<?= site_url('transaksi/hapus/' . $t->id_pemesanan) ?>" class="btn btn-danger btn-sm"
                                onclick="return confirm('Hapus transaksi ini?')"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
                     <?php endforeach; else: ?>
-                    <tr><td colspan="8" class="text-center text-muted">Belum ada transaksi</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted">Belum ada transaksi</td></tr>
                     <?php endif; ?>
                 </tbody>
             </table>

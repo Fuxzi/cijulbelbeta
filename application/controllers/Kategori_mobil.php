@@ -24,6 +24,7 @@ class Kategori_mobil extends CI_Controller {
 
     public function tambah()
     {
+        admin_only(); // fungsi helper untuk cek admin
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar');
@@ -33,6 +34,7 @@ class Kategori_mobil extends CI_Controller {
 
     public function simpan()
     {
+        admin_only(); // fungsi helper untuk cek admin
         $data = ['nama_kategori' => $this->input->post('nama_kategori'), 'deskripsi' => $this->input->post('deskripsi')];
         $this->Kategori_mobil_model->insert($data);
         $this->session->set_flashdata('success', 'Kategori berhasil ditambahkan!');
@@ -41,6 +43,7 @@ class Kategori_mobil extends CI_Controller {
 
     public function edit($id)
     {
+        admin_only(); // fungsi helper untuk cek admin
         $data['kategori'] = $this->Kategori_mobil_model->get_by_id($id);
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
@@ -51,6 +54,7 @@ class Kategori_mobil extends CI_Controller {
 
     public function update()
     {
+        admin_only(); // fungsi helper untuk cek admin
         $id   = $this->input->post('id');
         $data = ['nama_kategori' => $this->input->post('nama_kategori'), 'deskripsi' => $this->input->post('deskripsi')];
         $this->Kategori_mobil_model->update($id, $data);
@@ -60,6 +64,7 @@ class Kategori_mobil extends CI_Controller {
 
     public function hapus($id)
     {
+        admin_only(); // fungsi helper untuk cek admin
         $this->Kategori_mobil_model->delete($id);
         $this->session->set_flashdata('success', 'Kategori berhasil dihapus!');
         redirect('kategori_mobil');

@@ -16,25 +16,24 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <table class="table table-bordered dataTable">
-                <thead class="thead-light">
-                    <tr><th>No</th><th>Nama Kategori</th><th>Deskripsi</th><th>Aksi</th></tr>
-                </thead>
-                <tbody>
-                    <?php if ($kategori): $no = 1; foreach ($kategori as $k): ?>
-                    <tr>
-                        <td><?= $no++ ?></td>
-                        <td><?= $k->nama_kategori ?></td>
-                        <td><?= $k->deskripsi ?></td>
-                        <td>
-                            <a href="<?= site_url('kategori_mobil/edit/' . $k->id) ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                            <a href="<?= site_url('kategori_mobil/hapus/' . $k->id) ?>" class="btn btn-danger btn-sm"
-                               onclick="return confirm('Hapus kategori ini?')"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <?php endforeach; else: ?>
-                    <tr><td colspan="4" class="text-center text-muted">Belum ada kategori</td></tr>
-                    <?php endif; ?>
-                </tbody>
+               <thead class="thead-light">
+    <tr><th>No</th><th>Nama Kategori</th><th>Deskripsi</th><th>Aksi</th></tr>
+</thead>
+<tbody>
+    <?php if ($kategori): $no = 1; foreach ($kategori as $k): ?>
+    <tr>
+        <td><?= $no++ ?></td>
+        <td><?= $k->nama_kategori ?></td>
+        <td><?= $k->deskripsi ?? '-' ?></td>
+        <td>
+            <a href="<?= site_url('kategori_mobil/edit/' . $k->id) ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+            <a href="<?= site_url('kategori_mobil/hapus/' . $k->id) ?>" class="btn btn-danger btn-sm"
+               onclick="return confirm('Hapus kategori ini?')"><i class="fas fa-trash"></i></a>
+        </td>
+    </tr>
+    <?php endforeach; else: ?>
+    <tr><td colspan="4" class="text-center text-muted">Belum ada kategori</td></tr>
+    <?php endif; ?>
             </table>
         </div>
     </div>

@@ -41,7 +41,7 @@ class Mobil extends CI_Controller {
         $foto = 'noimage.jpg';
         if (!empty($_FILES['foto']['name'])) {
             $config_upload = [
-                'upload_path'   => './assets/uploads/mobil/',
+                'upload_path'   => './assets/img/',
                 'allowed_types' => 'jpg|jpeg|png|webp',
                 'max_size'      => 2048,
                 'file_name'     => 'mobil_' . time(),
@@ -57,11 +57,12 @@ class Mobil extends CI_Controller {
         }
 
         $data = [
-            'kode_mobil'      => 'MOB-' . strtoupper(uniqid()),
-            'nama_mobil'      => $this->input->post('nama_mobil'),
-            'merek'           => $this->input->post('merek'),
-            'model'           => $this->input->post('model'),
+            'id_mobil'        => 'MOB-' . strtoupper(substr(uniqid(), -3)),
+            'merk'            => $this->input->post('merk'),
             'tipe'            => $this->input->post('tipe'),
+            'nama_mobil'      => $this->input->post('nama_mobil'),
+            'merek'           => $this->input->post('merk'),
+            'model'           => $this->input->post('tipe'),
             'tahun'           => $this->input->post('tahun'),
             'warna'           => $this->input->post('warna'),
             'transmisi'       => $this->input->post('transmisi'),
@@ -83,9 +84,9 @@ class Mobil extends CI_Controller {
         redirect('mobil');
     }
 
-    public function detail($id)
+    public function detail($id_mobil)
     {
-        $data['mobil'] = $this->Mobil_model->get_by_id($id);
+        $data['mobil'] = $this->Mobil_model->get_by_id($id_mobil);
         if (!$data['mobil']) { show_404(); }
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
@@ -94,9 +95,9 @@ class Mobil extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
-    public function edit($id)
+    public function edit($id_mobil)
     {
-        $data['mobil']    = $this->Mobil_model->get_by_id($id);
+        $data['mobil']    = $this->Mobil_model->get_by_id($id_mobil);
         $data['kategori'] = $this->Kategori_mobil_model->get_all();
         $data['penjual']  = $this->Penjual_model->get_all();
         if (!$data['mobil']) { show_404(); }
@@ -109,32 +110,32 @@ class Mobil extends CI_Controller {
 
     public function update()
     {
-        $id        = $this->input->post('id');
-        $mobil     = $this->Mobil_model->get_by_id($id);
-        $foto      = $mobil->foto; // tetap pakai foto lama
+        $id_mobil  = $this->input->post('id_mobil');
+        $mobil     = $this->Mobil_model->get_by_id($id_mobil);
+        $foto      = $mobil->foto ?? 'noimage.jpg';
 
         if (!empty($_FILES['foto']['name'])) {
             $config_upload = [
-                'upload_path'   => './assets/uploads/mobil/',
+                'upload_path'   => './assets/img/',
                 'allowed_types' => 'jpg|jpeg|png|webp',
                 'max_size'      => 2048,
                 'file_name'     => 'mobil_' . time(),
             ];
             $this->upload->initialize($config_upload);
             if ($this->upload->do_upload('foto')) {
-                // Hapus foto lama jika bukan default
-                if ($foto !== 'noimage.jpg' && file_exists('./assets/uploads/mobil/' . $foto)) {
-                    unlink('./assets/uploads/mobil/' . $foto);
+                if ($foto !== 'noimage.jpg' && file_exists('./assets/img/' . $foto)) {
+                    unlink('./assets/img/' . $foto);
                 }
                 $foto = $this->upload->data('file_name');
             }
         }
 
         $data = [
-            'nama_mobil'      => $this->input->post('nama_mobil'),
-            'merek'           => $this->input->post('merek'),
-            'model'           => $this->input->post('model'),
+            'merk'            => $this->input->post('merk'),
             'tipe'            => $this->input->post('tipe'),
+            'nama_mobil'      => $this->input->post('nama_mobil'),
+            'merek'           => $this->input->post('merk'),
+            'model'           => $this->input->post('tipe'),
             'tahun'           => $this->input->post('tahun'),
             'warna'           => $this->input->post('warna'),
             'transmisi'       => $this->input->post('transmisi'),
@@ -150,19 +151,21 @@ class Mobil extends CI_Controller {
             'status'          => $this->input->post('status'),
         ];
 
-        $this->Mobil_model->update($id, $data);
+        $this->Mobil_model->update($id_mobil, $data);
         $this->session->set_flashdata('success', 'Data mobil berhasil diperbarui!');
         redirect('mobil');
     }
 
-    public function hapus($id)
+    public function hapus($id_mobil)
     {
-        $mobil = $this->Mobil_model->get_by_id($id);
+            admin_only(); // fungsi helper untuk cek admin
+            
+        $mobil = $this->Mobil_model->get_by_id($id_mobil);
         if ($mobil && $mobil->foto !== 'noimage.jpg') {
-            $path = './assets/uploads/mobil/' . $mobil->foto;
+            $path = './assets/img/' . $mobil->foto;
             if (file_exists($path)) unlink($path);
         }
-        $this->Mobil_model->delete($id);
+        $this->Mobil_model->delete($id_mobil);
         $this->session->set_flashdata('success', 'Data mobil berhasil dihapus!');
         redirect('mobil');
     }

@@ -16,20 +16,25 @@ class Dashboard extends CI_Controller {
         $data['total_mobil']      = $this->db->count_all('mobil');
         $data['total_terjual']    = $this->db->where('status', 'Terjual')->count_all_results('mobil');
         $data['total_tersedia']   = $this->db->where('status', 'Tersedia')->count_all_results('mobil');
-        $data['total_transaksi']  = $this->db->count_all('transaksi');
-        $data['total_penjual']    = $this->db->count_all('penjual');
+        
+        // FIX: gabung pemesanan + pembelian
+        $data['total_transaksi']  = $this->db->count_all('pemesanan') + $this->db->count_all('pembelian');
+        
+        // FIX: tabel penjual belum ada, isi 0 dulu
+        $data['total_penjual']    = 0;
+        
         $data['total_pembeli']    = $this->db->count_all('pembeli');
 
-        // Data untuk chart - mobil per merek
-        $merek = $this->db->select('merek, COUNT(*) as jumlah')
-                           ->group_by('merek')
+        // Data untuk chart - mobil per merk (pakai merk, bukan merek)
+        $merk = $this->db->select('merk, COUNT(*) as jumlah')
+                           ->group_by('merk')
                            ->get('mobil')
                            ->result();
-        $data['chart_label'] = json_encode(array_column((array)$merek, 'merek'));
-        $data['chart_data']  = json_encode(array_column((array)$merek, 'jumlah'));
+        $data['chart_label'] = json_encode(array_column((array)$merk, 'merk'));
+        $data['chart_data']  = json_encode(array_column((array)$merk, 'jumlah'));
 
-        // 5 mobil terbaru
-        $data['mobil_terbaru'] = $this->db->order_by('tgl_masuk', 'DESC')
+        // FIX: kolom tgl_masuk tidak ada, pakai tahun
+        $data['mobil_terbaru'] = $this->db->order_by('tahun', 'DESC')
                                            ->limit(5)
                                            ->get('mobil')
                                            ->result();

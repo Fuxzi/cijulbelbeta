@@ -10,11 +10,11 @@
 
                 <div class="form-group">
                     <label>Pilih Mobil <span class="text-danger">*</span></label>
-                    <select name="id_mobil" class="form-control" required>
+                    <select name="id_mobil" id="id_mobil" class="form-control" required>
                         <option value="">-- Pilih Mobil Tersedia --</option>
                         <?php foreach ($mobil as $m): ?>
-                        <option value="<?= $m->id ?>" data-harga="<?= $m->harga ?>">
-                            <?= $m->nama_mobil ?> - Rp <?= number_format($m->harga, 0, ',', '.') ?>
+                        <option value="<?= $m->id_mobil ?>" data-harga="<?= $m->harga ?>">
+                            <?= $m->merk . ' ' . $m->tipe ?> (<?= $m->tahun ?>) - Rp <?= number_format($m->harga, 0, ',', '.') ?>
                         </option>
                         <?php endforeach; ?>
                     </select>
@@ -25,7 +25,7 @@
                     <select name="id_pembeli" class="form-control" required>
                         <option value="">-- Pilih Pembeli --</option>
                         <?php foreach ($pembeli as $p): ?>
-                        <option value="<?= $p->id ?>"><?= $p->nama ?> - <?= $p->no_hp ?></option>
+                        <option value="<?= $p->id_pembeli ?>"><?= $p->nama ?> - <?= $p->no_hp ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label>Catatan</label>
                     <textarea name="catatan" class="form-control" rows="3"
-                              placeholder="Catatan tambahan, syarat, metode bayar, dll..."></textarea>
+                              placeholder="Catatan tambahan..."></textarea>
                 </div>
 
                 <hr>
@@ -54,8 +54,7 @@
 </div>
 
 <script>
-// Auto-fill harga deal saat pilih mobil
-document.querySelector('[name="id_mobil"]').addEventListener('change', function() {
+document.getElementById('id_mobil').addEventListener('change', function() {
     var selected = this.options[this.selectedIndex];
     var harga = selected.getAttribute('data-harga');
     if (harga) {

@@ -6,7 +6,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form action="<?= site_url('pembeli/update') ?>" method="POST">
-                <input type="hidden" name="id" value="<?= $pembeli->id ?>">
+                <input type="hidden" name="id_pembeli" value="<?= $pembeli->id_pembeli ?>">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Nama Lengkap</label>
@@ -20,11 +20,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Email</label>
-                        <input type="email" name="email" class="form-control" value="<?= $pembeli->email ?>">
+                        <input type="email" name="email" class="form-control" value="<?= $pembeli->email ?? '' ?>">
                     </div>
                     <div class="form-group col-md-6">
                         <label>Kota</label>
-                        <input type="text" name="kota" class="form-control" value="<?= $pembeli->kota ?>">
+                        <input type="text" name="kota" class="form-control" value="<?= $pembeli->kota ?? '' ?>">
                     </div>
                 </div>
                 <div class="form-group">

@@ -1,28 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Auth_pembeli extends CI_Controller {
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('User_model');
         $this->load->model('Pembeli_model');
         $this->load->library('session');
         $this->load->helper(['url', 'form']);
     }
 
-    public function index()
+    public function login()
     {
-        // Jika sudah login, arahkan sesuai role
-        if ($this->session->userdata('logged_in')) {
-            redirect('dashboard');
-        }
         if ($this->session->userdata('logged_in_pembeli')) {
             redirect('home');
         }
-
-        $this->load->view('auth/login');
+        $this->load->view('auth_pembeli/login');
     }
 
     public function proses_login()
@@ -30,26 +24,9 @@ class Auth extends CI_Controller {
         $username = $this->input->post('username');
         $password = md5($this->input->post('password'));
 
-        // 1. Cek dulu di tabel user (admin/staff)
-        $user = $this->User_model->cek_login($username, $password);
-
-        if ($user) {
-            // Login sebagai Admin/Staff
-            $this->session->set_userdata([
-                'logged_in' => TRUE,
-                'id_user'   => $user->id_user,
-                'nama'      => $user->username,
-                'username'  => $user->username,
-                'role'      => $user->role,
-            ]);
-            redirect('dashboard');
-        }
-
-        // 2. Kalau tidak ada, cek di tabel pembeli
         $pembeli = $this->Pembeli_model->login($username, $password);
 
         if ($pembeli) {
-            // Login sebagai Pembeli
             $this->session->set_userdata([
                 'logged_in_pembeli' => TRUE,
                 'id_pembeli'        => $pembeli->id_pembeli,
@@ -57,16 +34,15 @@ class Auth extends CI_Controller {
                 'username_pembeli'  => $pembeli->username,
             ]);
             redirect('home');
+        } else {
+            $this->session->set_flashdata('error', 'Username atau password salah!');
+            redirect('auth_pembeli/login');
         }
-
-        // 3. Gagal semua
-        $this->session->set_flashdata('error', 'Username atau password salah!');
-        redirect('auth');
     }
 
     public function register()
     {
-        $this->load->view('auth/register');
+        $this->load->view('auth_pembeli/register');
     }
 
     public function proses_register()
@@ -82,12 +58,15 @@ class Auth extends CI_Controller {
         ];
         $this->Pembeli_model->insert($data);
         $this->session->set_flashdata('success', 'Registrasi berhasil! Silakan login.');
-        redirect('auth');
+        redirect('auth_pembeli/login');
     }
 
     public function logout()
     {
+        $this->session->unset_userdata('logged_in_pembeli');
+        $this->session->unset_userdata('id_pembeli');
+        $this->session->unset_userdata('nama_pembeli');
         $this->session->sess_destroy();
-        redirect('auth');
+        redirect('home');
     }
 }

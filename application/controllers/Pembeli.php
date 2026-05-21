@@ -34,6 +34,7 @@ class Pembeli extends CI_Controller {
     public function simpan()
     {
         $data = [
+            'id_pembeli' => $this->Pembeli_model->generate_id(),
             'nama'       => $this->input->post('nama'),
             'no_hp'      => $this->input->post('no_hp'),
             'email'      => $this->input->post('email'),
@@ -46,9 +47,10 @@ class Pembeli extends CI_Controller {
         redirect('pembeli');
     }
 
-    public function edit($id)
+    public function edit($id_pembeli)
     {
-        $data['pembeli'] = $this->Pembeli_model->get_by_id($id);
+        $data['pembeli'] = $this->Pembeli_model->get_by_id($id_pembeli);
+        if (!$data['pembeli']) show_404();
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar');
         $this->load->view('templates/topbar');
@@ -58,7 +60,7 @@ class Pembeli extends CI_Controller {
 
     public function update()
     {
-        $id   = $this->input->post('id');
+        $id_pembeli = $this->input->post('id_pembeli');
         $data = [
             'nama'   => $this->input->post('nama'),
             'no_hp'  => $this->input->post('no_hp'),
@@ -66,14 +68,14 @@ class Pembeli extends CI_Controller {
             'alamat' => $this->input->post('alamat'),
             'kota'   => $this->input->post('kota'),
         ];
-        $this->Pembeli_model->update($id, $data);
+        $this->Pembeli_model->update($id_pembeli, $data);
         $this->session->set_flashdata('success', 'Data pembeli berhasil diperbarui!');
         redirect('pembeli');
     }
 
-    public function hapus($id)
+    public function hapus($id_pembeli)
     {
-        $this->Pembeli_model->delete($id);
+        $this->Pembeli_model->delete($id_pembeli);
         $this->session->set_flashdata('success', 'Pembeli berhasil dihapus!');
         redirect('pembeli');
     }

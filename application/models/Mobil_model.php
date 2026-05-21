@@ -4,30 +4,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Mobil_model extends CI_Model {
 
     private $table = 'mobil';
+    private $id    = 'id_mobil';
 
     public function get_all()
     {
-        return $this->db->select('mobil.*, kategori_mobil.nama_kategori, penjual.nama as nama_penjual')
-                        ->join('kategori_mobil', 'kategori_mobil.id = mobil.id_kategori', 'left')
-                        ->join('penjual', 'penjual.id = mobil.id_penjual', 'left')
-                        ->order_by('mobil.tgl_masuk', 'DESC')
+        // Tabel kategori_mobil & penjual belum ada, join dihapus dulu
+        return $this->db->order_by('tahun', 'DESC')
                         ->get($this->table)
                         ->result();
     }
 
     public function get_by_id($id)
     {
-        return $this->db->select('mobil.*, kategori_mobil.nama_kategori, penjual.nama as nama_penjual')
-                        ->join('kategori_mobil', 'kategori_mobil.id = mobil.id_kategori', 'left')
-                        ->join('penjual', 'penjual.id = mobil.id_penjual', 'left')
-                        ->where('mobil.id', $id)
+        return $this->db->where($this->id, $id)
                         ->get($this->table)
                         ->row();
-    }
-
-    public function get_by_status($status)
-    {
-        return $this->db->where('status', $status)->get($this->table)->result();
     }
 
     public function insert($data)
@@ -37,11 +28,49 @@ class Mobil_model extends CI_Model {
 
     public function update($id, $data)
     {
-        $this->db->where('id', $id)->update($this->table, $data);
+        $this->db->where($this->id, $id);
+        return $this->db->update($this->table, $data);
     }
 
-    public function delete($id)
+   public function delete($id)
+{
+    $this->db->where('id_mobil', $id);
+    return $this->db->delete($this->table);
+}
+
+    // Untuk dropdown/filter - semuanya dari tabel mobil saja
+    public function get_merk()
     {
-        $this->db->where('id', $id)->delete($this->table);
+        return $this->db->select('merk')
+                        ->group_by('merk')
+                        ->get($this->table)
+                        ->result();
+    }
+
+    public function get_tahun()
+    {
+        return $this->db->select('tahun')
+                        ->group_by('tahun')
+                        ->order_by('tahun', 'DESC')
+                        ->get($this->table)
+                        ->result();
+    }
+// Di Mobil_model.php, tambah:
+public function get_tersedia()
+{
+    return $this->db->where('status', 'Tersedia')
+                    ->order_by('merk', 'ASC')
+                    ->get($this->table)
+                    ->result();
+}
+    // Total stok
+    public function total_tersedia()
+    {
+        return $this->db->where('status', 'Tersedia')->count_all_results($this->table);
+    }
+
+    public function total_terjual()
+    {
+        return $this->db->where('status', 'Terjual')->count_all_results($this->table);
     }
 }

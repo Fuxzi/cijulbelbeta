@@ -27,11 +27,11 @@
                         <tr>
                             <th>No</th>
                             <th>Foto</th>
-                            <th>Nama Mobil</th>
-                            <th>Merek / Model</th>
+                            <th>Mobil</th>
+                            <th>Merk / Tipe</th>
                             <th>Tahun</th>
                             <th>Harga</th>
-                            <th>KM</th>
+                            <th>Warna</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -41,23 +41,29 @@
                         <tr>
                             <td><?= $no++ ?></td>
                             <td>
-                                <img src="<?= base_url('assets/uploads/mobil/' . $m->foto) ?>"
-                                     class="img-mobil-thumb" alt="foto">
+                                <img src="<?= base_url('assets/img/' . $m->foto) ?>"
+                                     class="img-mobil-thumb" alt="foto" width="80">
                             </td>
-                            <td><?= $m->nama_mobil ?></td>
-                            <td><?= $m->merek ?> <?= $m->model ?></td>
+                            <td><?= $m->merk . ' ' . $m->tipe ?></td>
+                            <td><?= $m->merk ?> / <?= $m->tipe ?></td>
                             <td><?= $m->tahun ?></td>
                             <td>Rp <?= number_format($m->harga, 0, ',', '.') ?></td>
-                            <td><?= number_format($m->km_tempuh, 0, ',', '.') ?> km</td>
+                            <td><?= $m->warna ?></td>
                             <td>
-                                <span class="badge badge-<?= strtolower($m->status) ?>">
-                                    <?= $m->status ?>
-                                </span>
+                                <?php if ($m->status == 'Tersedia'): ?>
+                                    <span class="badge badge-success">Tersedia</span>
+                                <?php elseif ($m->status == 'Terjual'): ?>
+                                    <span class="badge badge-danger">Terjual</span>
+                                <?php elseif ($m->status == 'Dipesan'): ?>
+                                    <span class="badge badge-warning">Dipesan</span>
+                                <?php else: ?>
+                                    <span class="badge badge-secondary"><?= $m->status ?></span>
+                                <?php endif; ?>
                             </td>
                             <td>
-                                <a href="<?= site_url('mobil/detail/' . $m->id) ?>" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                <a href="<?= site_url('mobil/edit/' . $m->id) ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                <a href="<?= site_url('mobil/hapus/' . $m->id) ?>" class="btn btn-danger btn-sm"
+                                <a href="<?= site_url('mobil/detail/' . $m->id_mobil) ?>" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                <a href="<?= site_url('mobil/edit/' . $m->id_mobil) ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                <a href="<?= site_url('mobil/hapus/' . $m->id_mobil) ?>" class="btn btn-danger btn-sm"
                                    onclick="return confirm('Hapus data mobil ini?')"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>

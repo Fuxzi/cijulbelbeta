@@ -60,12 +60,12 @@
         </div>
     </div>
 
-    <!-- Chart + Tabel Terbaru -->
+    <!-- Chart + Ringkasan -->
     <div class="row">
         <div class="col-xl-7 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Distribusi Mobil per Merek</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Distribusi Mobil per Merk</h6>
                 </div>
                 <div class="card-body">
                     <canvas id="chartMerek" height="80"></canvas>
@@ -104,7 +104,7 @@
     <!-- Tabel Mobil Terbaru -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Mobil Terbaru Masuk</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Mobil Terbaru</h6>
             <a href="<?= site_url('mobil') ?>" class="btn btn-sm btn-primary">Lihat Semua</a>
         </div>
         <div class="card-body">
@@ -112,8 +112,8 @@
                 <table class="table table-bordered table-sm">
                     <thead class="thead-light">
                         <tr>
-                            <th>Nama Mobil</th>
-                            <th>Merek</th>
+                            <th>Merk</th>
+                            <th>Tipe</th>
                             <th>Tahun</th>
                             <th>Harga</th>
                             <th>Status</th>
@@ -122,14 +122,18 @@
                     <tbody>
                         <?php if ($mobil_terbaru): foreach ($mobil_terbaru as $m): ?>
                         <tr>
-                            <td><?= $m->nama_mobil ?></td>
-                            <td><?= $m->merek ?></td>
+                            <td><?= $m->merk ?></td>
+                            <td><?= $m->tipe ?></td>
                             <td><?= $m->tahun ?></td>
                             <td>Rp <?= number_format($m->harga, 0, ',', '.') ?></td>
                             <td>
-                                <span class="badge badge-<?= strtolower($m->status) ?>">
-                                    <?= $m->status ?>
-                                </span>
+                                <?php if ($m->status == 'Tersedia'): ?>
+                                    <span class="badge badge-success">Tersedia</span>
+                                <?php elseif ($m->status == 'Terjual'): ?>
+                                    <span class="badge badge-danger">Terjual</span>
+                                <?php else: ?>
+                                    <span class="badge badge-warning"><?= $m->status ?></span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; else: ?>
